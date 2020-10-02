@@ -18,17 +18,27 @@ joukowsky <- function (z){
 
 # Define UI
 ui <- fluidPage(theme = shinytheme("lumen"),
+                
                 titlePanel("Joukowsky transform"),
+                
+                
+                
+                withMathJax(),
+                helpText('Transformation of a circle: $$ |Z - (- \\epsilon c + ia \\cdot tan(\\beta)) | = (a/cos(\\beta))^2,\\ where \\ a = c(1 + \\epsilon) $$ '),
+                
+                hr(),
+                
                 sidebarLayout(
+                  
                   sidebarPanel(
                     
                     #Side bar
                     sliderInput(inputId = "eps", 
-                                label = "EPS:",
+                                label = "EPS (ϵ):",
                                 min = 0, 
-                                max = 1, 
+                                max = 0.5, 
                                 value = 0, 
-                                step = 0.01,
+                                step = 0.001,
                                 animate = animationOptions(interval = 100)
                                 ),
                     
@@ -42,19 +52,23 @@ ui <- fluidPage(theme = shinytheme("lumen"),
                     ),
                     
                     sliderInput(inputId = "b", 
-                                label = "B_DEG:",
+                                label = "BETA_DEG (β):",
                                 min = 0, 
                                 max = 25, 
                                 value = 0, 
                                 step = 0.01,
                                 animate = animationOptions(interval = 100)
-                    )
+                    ),
+                    
+                    textOutput(outputId = "desc")
+                    
+                    
+                    
                   ),
                   
                   # Output: Description and lineplot
                   mainPanel(
-                    plotOutput(outputId = "lineplot", height = "500px", width = "500px"),
-                    textOutput(outputId = "desc")
+                    plotOutput(outputId = "lineplot", height = "500px", width = "500px")
                   )
                 )
 )
@@ -82,8 +96,8 @@ server <- function(input, output) {
     par(mar = c(4, 4, 1, 1))
     plot(joukowsky(set()),
          type = "l",
-         xlab = "Im", 
-         ylab = "Re", 
+         xlab = "Re", 
+         ylab = "Im", 
          col = color, 
          fg = color, 
          col.lab = color, 
@@ -95,13 +109,12 @@ server <- function(input, output) {
   
   # Pull in description
   output$desc <- renderText({
-    c("eps: ", input$f)
+    c("ϵ: ", input$eps, "c: ", input$c, "β: ", input$b,"°")
   })
 }
 
 # Create Shiny object
 shinyApp(ui = ui, server = server)
-
 
 
 
