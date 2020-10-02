@@ -44,10 +44,10 @@ ui <- fluidPage(theme = shinytheme("lumen"),
                     
                     sliderInput(inputId = "c", 
                                 label = "C:",
-                                min = 0, 
+                                min = 0.95, 
                                 max = 1, 
                                 value = 1, 
-                                step = 0.01,
+                                step = 0.001,
                                 animate = animationOptions(interval = 100)
                     ),
                     
